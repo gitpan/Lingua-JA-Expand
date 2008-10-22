@@ -76,6 +76,7 @@ sub _merge_hashes {
     return \%merged;
 }
 
+
 1;
 
 __END__

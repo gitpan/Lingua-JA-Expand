@@ -1,21 +1,21 @@
---- 
-abstract: word expander by associatives
-author: 
-  - Takeshi Miki <miki@cpan.org>
-build_requires: 
+---
+abstract: 'word expander by associatives'
+author:
+  - 'Takeshi Miki <miki@cpan.org>'
+build_requires:
   Test::More: 0
 distribution_type: module
-generated_by: Module::Install version 0.68
+generated_by: 'Module::Install version 0.77'
 license: perl
-meta-spec: 
-  url: http://module-build.sourceforge.net/META-spec-v1.3.html
-  version: 1.3
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
 name: Lingua-JA-Expand
-no_index: 
-  directory: 
+no_index:
+  directory:
     - inc
     - t
-requires: 
+requires:
   Carp: 0
   Class::Accessor::Fast: 0
   Class::Data::Inheritable: 0
@@ -23,5 +23,6 @@ requires:
   List::MoreUtils: 0
   UNIVERSAL::require: 0
   XML::TreePP: 0
-tests: t/*.t t/*/*.t
-version: 0.00001
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.00002

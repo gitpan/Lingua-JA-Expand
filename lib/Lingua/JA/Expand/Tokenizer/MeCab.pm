@@ -63,14 +63,15 @@ sub tokenize {
 
 sub _NG {
     return (
-        '(', ')', '#', ',', '"', "'", '`',
+        '(', ')', '#', ',', '"', '\'', '`',
         qw(! $ % & * + - . / : ; < = > ? @ [ \ ] ^ _ { | } ~),
         qw(人 秒 分 時 日 月 年 円 ドル),
         qw(一 二 三 四 五 六 七 八 九 十 百 千 万 億 兆),
         qw(↑ ↓ ← → ⇒ ⇔ ＼ ＾ ｀ ヽ),
         qw(a any the who he she i to and in you is you str this ago about and new as of for if or it have by into at on an are were was be my am your we them there their from all its),
-        qw(検索 サイト ホームページ 情報 関連 一覧 運営 お ご ... gt amp lt),
+        qw(検索 サイト ホームページ 情報 関連 一覧 運営 お ご ... gt amp lt ー ¥ !! jp com :// htm html),
         qw(a b c d e f g h i j k l m n o p q r s t u v w x y z),
+        qw(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z),
     );
 }
 

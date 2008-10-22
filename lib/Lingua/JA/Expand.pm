@@ -6,7 +6,7 @@ use Carp;
 use base qw(Lingua::JA::Expand::Base);
 use UNIVERSAL::require;
 
-our $VERSION = '0.00001';
+our $VERSION = '0.00002';
 
 __PACKAGE__->mk_accessors qw(_tokenizer _datasource);
 
@@ -75,7 +75,7 @@ Lingua::JA::Expand - word expander by associatives
   my $exp = Lingua::JA::Expand->new(\%conf);
 
   # expand the word by associatives 
-  my $word_set = $exp->expand("自動車");
+  my $word_set = $exp->expand($word);
   print Dumper $word_set;
 
   # you can tokenize a document by extract featured words. 
