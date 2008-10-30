@@ -6,9 +6,15 @@ use Carp;
 use base qw(Lingua::JA::Expand::Base);
 use UNIVERSAL::require;
 
-our $VERSION = '0.00002';
+our $VERSION = '0.00003';
 
 __PACKAGE__->mk_accessors qw(_tokenizer _datasource);
+
+sub new {
+    my $class = shift;
+    my %args  = @_;
+    my $self  = $class->SUPER::new( \%args );
+}
 
 sub expand {
     my $self      = shift;
@@ -72,7 +78,7 @@ Lingua::JA::Expand - word expander by associatives
   use Lingua::JA::Expand;
   use Data::Dumper;
 
-  my $exp = Lingua::JA::Expand->new(\%conf);
+  my $exp = Lingua::JA::Expand->new(%conf);
 
   # expand the word by associatives 
   my $word_set = $exp->expand($word);
@@ -87,6 +93,8 @@ Lingua::JA::Expand - word expander by associatives
 Lingua::JA::Expand is word expander by associatives
 
 =head1 METHODS
+
+=head2 new()
 
 =head2 expand()
 

@@ -20,9 +20,9 @@ requires:
   Class::Accessor::Fast: 0
   Class::Data::Inheritable: 0
   LWP::UserAgent: 0
-  List::MoreUtils: 0
+  Lingua::JA::TFIDF: 0
   UNIVERSAL::require: 0
   XML::TreePP: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.00002
+version: 0.00003

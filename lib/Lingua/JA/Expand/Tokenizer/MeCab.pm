@@ -3,67 +3,39 @@ package Lingua::JA::Expand::Tokenizer::MeCab;
 use strict;
 use warnings;
 use base qw(Lingua::JA::Expand::Tokenizer);
-use List::MoreUtils qw(any);
+use Lingua::JA::TFIDF;
 
 sub tokenize {
     my $self      = shift;
     my $text_ref  = shift;
     my $threshold = shift;
-    my $config    = $self->config->{tokenizer_config};
+    my $config    = $self->config;
     $threshold ||= $config->{threshold};
     $threshold ||= 100;
 
     my %hash;
+    my @ngword = _NG();
 
-    if ($$text_ref) {
-
-        $$text_ref =~ s/\r\n//g;
-        $$text_ref =~ s/\n//g;
-        $$text_ref =~ s/'//g;
-        $$text_ref =~ s/"//g;
-        $$text_ref =~ s/|//g;
-
-        my $cmd =
-            'echo \''
-          . $$text_ref
-          . '\' | mecab -b 100000 --node-format="%m\t%pw\t%H\n" --unk-format="%m\t%pw\t%H\tUNK\n"';
-        my @ret = `$cmd`;
-
-        my @NG_word = _NG();
-
-        my %tf;
-        my %info;
-        my %cost;
-        for (@ret) {
-            chomp $_;
-            my ( $word, $cost, $info, $unkown ) = split( /\t/, $_, 4 );
-            next if !$info;
-            if ( $info =~ /名詞/ ) {
-                next if $info =~ /数|非自立|語幹|代名詞|接尾/;
-                next if any { $word eq $_ } @NG_word;
-                $tf{$word}++;
-                $info{$word} = $info;
-                $cost{$word} = $cost;
-            }
-        }
-
-        my @sorted = sort { $tf{$b} <=> $tf{$a} or $cost{$b} <=> $cost{$a}; }
-          keys %tf;
-
-        my $i;
-        for (@sorted) {
-            $i++;
-            last if ( $i > $threshold );
-            $hash{$_} += $tf{$_};
-        }
-
+    my $calc = Lingua::JA::TFIDF->new(%$config);
+    $calc->ng_word( \@ngword );
+    my $list = $calc->tfidf($$text_ref)->list($threshold);
+    for (@$list) {
+        my ( $word, $score ) = each(%$_);
+        $hash{$word} = $score;
     }
+
     return \%hash;
 }
 
 sub _NG {
     return (
-        '(', ')', '#', ',', '"', '\'', '`',
+        '(',
+        ')',
+        '#',
+        ',',
+        '"',
+        '\'',
+        '`',
         qw(! $ % & * + - . / : ; < = > ? @ [ \ ] ^ _ { | } ~),
         qw(人 秒 分 時 日 月 年 円 ドル),
         qw(一 二 三 四 五 六 七 八 九 十 百 千 万 億 兆),
