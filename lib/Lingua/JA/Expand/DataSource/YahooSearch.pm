@@ -61,10 +61,19 @@ sub _prepare {
     $self->{user_agent} = LWP::UserAgent->new(%LWP_UserAgent_config);
     my $yahoo_api_appid = $self->config->{yahoo_api_appid};
     croak("you must set your own 'yahoo_api_app_id'") if !$yahoo_api_appid;
-    $self->{url}
-        = 'http://search.yahooapis.jp/WebSearchService/V2/webSearch?appid='
-        . $yahoo_api_appid
-        . '&results=20&adult_ok=1&query=';
+
+    if ( $self->config->{yahoo_api_premium} ) {
+        $self->{url}
+            = 'http://search.yahooapis.jp/PremiumWebSearchService/V1/webSearch?appid='
+            . $yahoo_api_appid
+            . '&results=20&adult_ok=1&query=';
+    }
+    else {
+        $self->{url}
+            = 'http://search.yahooapis.jp/WebSearchService/V2/webSearch?appid='
+            . $yahoo_api_appid
+            . '&results=20&adult_ok=1&query=';
+    }
 }
 
 1;
@@ -81,6 +90,7 @@ Lingua::JA::Expand::DataSource::YahooSearch - DataSource depend on Yahoo Web API
 
   my %conf = (
     yahoo_api_appid => 'xxxxxxxxxxxxx',
+    yahoo_api_premium => 1,
   );
   my $datasource = Lingua::JA::Expand::DataSource::YahooSearch->new(\%conf);
   my $text_ref   = $datasource->extract_text(\$word);

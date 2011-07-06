@@ -2,22 +2,25 @@ use strict;
 use warnings;
 use Lingua::JA::Expand;
 
-print "Input your 'Yahoo API appid':";
+print "Yahoo API appIDを入力してください（2011年4月以降、有料版でないとうまく動作しなくなりました) : ";
 my $appid = <STDIN>;
 chomp $appid;
-warn(
-"You must set your own yahoo_api_appid, but now this program will try to 'test' for temporary"
-) if !$appid;
-$appid ||= 'test';
-my %config = ( yahoo_api_appid => $appid );
+
+die("Yahoo API appIDが入力されていません") if !$appid;
+
+my %conf = (
+    yahoo_api_appid   => $appid,
+    yahoo_api_premium => 1,
+);
 
 loop();
 
 sub loop {
     print "Input keyword: ";
     my $keyword = <STDIN>;
-    my $exp     = Lingua::JA::Expand->new(%config);
+    my $exp     = Lingua::JA::Expand->new(%conf);
     my $result  = $exp->expand($keyword);
+	exit if !$result;
     print "-" x 100, "\n";
     for ( sort { $result->{$b} <=> $result->{$a} } keys %$result ) {
         print sprintf( "%0.5f", $result->{$_} ), "\t", $_, "\n";

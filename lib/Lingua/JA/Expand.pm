@@ -6,7 +6,7 @@ use Carp;
 use base qw(Lingua::JA::Expand::Base);
 use UNIVERSAL::require;
 
-our $VERSION = '0.00007';
+our $VERSION = '0.01002';
 
 __PACKAGE__->mk_accessors qw(_tokenizer _datasource);
 
@@ -24,6 +24,7 @@ sub expand {
         carp("put any word") and return;
     }
     my $text_ref = $self->datasource->extract_text( \$word );
+    return undef if !$text_ref;
     my $word_set = $self->tokenizer->tokenize( $text_ref, $threshold );
     return $word_set;
 }
@@ -63,8 +64,8 @@ sub _class_loader {
             }
             $class->require or croak $@;
             $class->new($config);
-          }
-          ->()
+            }
+            ->()
     );
 }
 
@@ -82,7 +83,8 @@ Lingua::JA::Expand - word expander by associatives
   use Data::Dumper;
 
   my %conf = (
-    yahoo_api_appid => 'xxxxxxxxxxxx',
+    yahoo_api_appid => 'xxxxxxxxxxxxx',
+    yahoo_api_premium => 1,
   );
 
   my $exp = Lingua::JA::Expand->new(%conf);
@@ -99,13 +101,18 @@ Lingua::JA::Expand - word expander by associatives
 
 Lingua::JA::Expand is word expander by associatives
 
+# 2011年4月以降、YahooAPIの仕様変更により、利用制限が厳しくなりました。
+# 現在のところ、有料版のアカウントによるappidのみ、正常に動作するようです。（無料版ではまともに動きません）
+
+  see =>  http://developer.yahoo.co.jp/webapi/search/premium.html
+
 =head1 METHODS
 
-=head2 new()
+=head2 new( yahoo_api_appid => 'xxxxxxxxx', yahoo_api_premium => 1 )
 
-=head2 expand()
+=head2 expand($word)
 
-=head2 tokenize()
+=head2 tokenize($text, $threshold)
 
 =head2 tokenizer()
 
